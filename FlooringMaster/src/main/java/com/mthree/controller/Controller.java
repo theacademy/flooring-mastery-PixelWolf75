@@ -75,6 +75,8 @@ public class Controller {
         List<Tax> taxes = service.getTaxes();
         List<Product> products = service.getProducts();
         Order editedOrder = view.getOrderEditInput(service.editOrder(orderDate, orderNo), taxes, products);
+        service.removeOrder(orderDate, orderNo);
+        service.addOrder(editedOrder);
     }
 
     public void removeOrder()
