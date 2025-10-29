@@ -16,29 +16,26 @@ public class UserIOConsoleImpl implements UserIO{
     @Override
     public String readString(String prompt) {
         this.display(prompt);
-        String result = scan.nextline();
-        return result;
+        return scan.nextLine();
     }
 
     @Override
     public int readInt(String prompt) {
-        do {
+        while(true) {
             String input = this.readString(prompt);
             try{
-                return Integer.parse(input);
+                return Integer.parseInt(input);
             }
             catch(NumberFormatException e)
             {
                 this.display("The input isn't an integer please try again");
             }
-        } while(true);
-
-        return -1;
+        }
     }
 
     @Override
     public int readInt(String prompt, int min) {
-        do {
+        while(true) {
             int input = this.readInt(prompt);
             if (input >= min)
             {
@@ -48,9 +45,7 @@ public class UserIOConsoleImpl implements UserIO{
             {
                 this.display("The number needs to be at least " + min);
             }
-        } while(true)
-
-        return -1;
+        }
     }
 
     @Override
@@ -67,7 +62,5 @@ public class UserIOConsoleImpl implements UserIO{
                 this.display("The number needs to be at most " + max);
             }
         }
-
-        return -1;
     }
 }
