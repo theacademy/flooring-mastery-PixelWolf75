@@ -1,20 +1,18 @@
-package com.mthree;
+package com.mthree.service;
 
 import com.mthree.controller.Controller;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    public static void main(String[] args) {
+public class TestServiceLayer {
 
+    public TestServiceLayer()
+    {
         //Setup appContext and scan for annotations
         AnnotationConfigApplicationContext appContext = new AnnotationConfigApplicationContext();
         appContext.scan("com.mthree");
         appContext.refresh();
 
         //Instantiate the controller using the beans from the app context
-        Controller controller = appContext.getBean("controller", Controller.class);
-        controller.run();
+        ServiceLayer service = appContext.getBean("serviceLayer", ServiceLayer.class);
     }
 }
