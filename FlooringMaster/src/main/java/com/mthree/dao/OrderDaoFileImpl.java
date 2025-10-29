@@ -3,10 +3,15 @@ package com.mthree.dao;
 import com.mthree.model.Order;
 import org.springframework.stereotype.Component;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 @Component
 public class OrderDaoFileImpl implements OrderDao{
@@ -17,11 +22,23 @@ public class OrderDaoFileImpl implements OrderDao{
 
     @Override
     public void writeToFile() {
-
+        String fileName = "";
+        try{
+            PrintWriter writer = new PrintWriter(new FileWriter(ORDER_FOLDER + fileName));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void loadFromFile() {
+        String fileName = "";
+        try
+        {
+            Scanner sc = new Scanner(new BufferedReader(new FileReader(ORDER_FOLDER + fileName)));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
@@ -39,17 +56,17 @@ public class OrderDaoFileImpl implements OrderDao{
 
     @Override
     public Order getOrder(Date orderDate, int orderNo) {
-        return null;
+        return orders.get(orderDate).get(orderNo);
     }
 
     @Override
     public Order editOrder(Date orderDate, int orderNo) {
-        return null;
+        return orders.get(orderDate).get(orderNo);
     }
 
     @Override
     public List<Order> getOrdersFromDate(LocalDate orderDate) {
-        return List.of();
+        return (List<Order>) orders.get(orderDate).values();
     }
 
     @Override
@@ -60,6 +77,6 @@ public class OrderDaoFileImpl implements OrderDao{
 
     @Override
     public Map<LocalDate, Map<Integer, Order>> getAllOrders() {
-        return Map.of();
+        return orders;
     }
 }
