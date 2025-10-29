@@ -10,6 +10,11 @@ import java.util.Map;
 
 @Component
 public class OrderDaoFileImpl implements OrderDao{
+
+    final String ORDER_FOLDER = "Orders/";
+    Map<LocalDate, Map<Integer, Order>> orders;
+    int largestOrderNumber = 0;
+
     @Override
     public void writeToFile() {
 
@@ -22,11 +27,13 @@ public class OrderDaoFileImpl implements OrderDao{
 
     @Override
     public int getNextOrderNumber() {
-        return 0;
+        return this.largestOrderNumber;
     }
 
     @Override
     public Order addOrder(Order order) {
+
+        largestOrderNumber++;
         return null;
     }
 
@@ -47,6 +54,7 @@ public class OrderDaoFileImpl implements OrderDao{
 
     @Override
     public Order removeOrder(Date orderDate, int orderNo) {
+        largestOrderNumber--;
         return null;
     }
 

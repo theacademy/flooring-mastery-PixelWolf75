@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -28,7 +30,7 @@ public class ServiceLayerImpl implements ServiceLayer{
 
     @Override
     public int getNextOrderNumber() {
-        return 0;
+        return orderDao.getNextOrderNumber();
     }
 
     @Override
@@ -38,31 +40,34 @@ public class ServiceLayerImpl implements ServiceLayer{
 
     @Override
     public Order getOrder(LocalDate orderDate, int orderNo) {
-        return null;
+        Date date = Date.from(orderDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        return orderDao.getOrder(date, orderNo);
     }
 
     @Override
     public Order editOrder(LocalDate orderDate, int orderNo) {
-        return null;
+        Date date = Date.from(orderDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        return orderDao.editOrder(date, orderNo);
     }
 
     @Override
     public List<Order> getOrdersFromDate(LocalDate orderDate) {
-        return List.of();
+        return orderDao.getOrdersFromDate(orderDate);
     }
 
     @Override
     public Order removeOrder(LocalDate orderDate, int orderNo) {
-        return null;
+        Date date = Date.from(orderDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        return orderDao.removeOrder(date, orderNo);
     }
 
     @Override
     public List<Tax> getTaxes() {
-        return List.of();
+        return taxDao.getAllTaxes();
     }
 
     @Override
     public List<Product> getProducts() {
-        return List.of();
+        return productDao.getAllProducts();
     }
 }
