@@ -44,7 +44,7 @@ public class Controller {
                     removeOrder();
                     break;
                 case 5:
-                    //Export
+                    view.displayError("Export hasn't been implemented");
                     break;
                 case 6:
                     exitMessage();
