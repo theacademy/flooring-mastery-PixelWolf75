@@ -1,0 +1,2 @@
+OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total
+0,Eric,Calfornia,25.00,Wood,105,5.15,4.75,540.75,498.75,259.8750,1299.3750

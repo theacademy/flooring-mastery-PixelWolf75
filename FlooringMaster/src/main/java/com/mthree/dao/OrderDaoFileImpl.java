@@ -27,6 +27,12 @@ public class OrderDaoFileImpl implements OrderDao{
         try{
             for(LocalDate orderDate : orders.keySet())
             {
+                String month = String.valueOf(orderDate.getMonthValue());
+                month = month.length() != 2 ? "0" + month : month;
+                String day = String.valueOf(orderDate.getDayOfMonth());
+                day = day.length() != 2 ? "0" + day : day;
+                String year = String.valueOf(orderDate.getYear());
+
                 String fileName = ORDER_FOLDER + PREFIX + orderDate.getMonthValue() + orderDate.getDayOfMonth() + orderDate.getDayOfYear() + SUFFIX;
                 PrintWriter writer = new PrintWriter(new FileWriter(fileName));
 
@@ -36,6 +42,8 @@ public class OrderDaoFileImpl implements OrderDao{
                 {
                     writer.println(order.toString());
                 }
+                writer.flush();
+                writer.close();
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

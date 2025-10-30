@@ -36,7 +36,7 @@ public class ServiceLayerImpl implements ServiceLayer{
 
     @Override
     public Order addOrder(Order order) {
-        return null;
+        return orderDao.addOrder(order);
     }
 
     @Override
