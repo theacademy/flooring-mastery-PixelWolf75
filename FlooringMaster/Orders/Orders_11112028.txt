@@ -1,0 +1,2 @@
+OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total
+3,Test,Texas,4.45,Laminate,105,1.75,2.10,183.75,220.50,20.2125,424.4625

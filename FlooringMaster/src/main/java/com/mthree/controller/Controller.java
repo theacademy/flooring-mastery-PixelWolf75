@@ -68,10 +68,16 @@ public class Controller {
     public void editOrder()
     {
         LocalDate orderDate = view.DateInput();
-        int orderNo = view.getOrderNumberInput(service.getNextOrderNumber() - 1);
+        int orderNo = view.getOrderNumberInput(service.getNextOrderNumber());
         List<Tax> taxes = service.getTaxes();
         List<Product> products = service.getProducts();
-        Order editedOrder = view.getOrderEditInput(service.editOrder(orderDate, orderNo), taxes, products);
+        Order orderToEdit = service.editOrder(orderDate, orderNo);
+        if (orderToEdit == null)
+        {
+            view.displayError("No Order found");
+            return;
+        }
+        Order editedOrder = view.getOrderEditInput(orderToEdit, taxes, products);
         service.removeOrder(orderDate, orderNo);
         service.addOrder(editedOrder);
     }
@@ -81,7 +87,7 @@ public class Controller {
     {
         LocalDate orderDate = view.DateInput();
         List<Order> orders = service.getOrdersFromDate(orderDate);
-        int orderNo = view.getOrderNumberInput(service.getNextOrderNumber() - 1);
+        int orderNo = view.getOrderNumberInput(service.getNextOrderNumber());
 
         if (orders == null)
         {
