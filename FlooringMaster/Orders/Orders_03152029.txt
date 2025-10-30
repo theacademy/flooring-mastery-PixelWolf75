@@ -1,0 +1,2 @@
+OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total
+3,Eric Leon,WA,9.25,Carpet,1000,2.25,2.10,2250.00,2100.00,435.0000,4785.0000
