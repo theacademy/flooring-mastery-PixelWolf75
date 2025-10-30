@@ -176,13 +176,13 @@ public class OrderDaoFileImpl implements OrderDao{
     @Override
     public Order editOrder(LocalDate orderDate, int orderNo) {
         loadFromFile();
-        return orders.get(orderDate).get(orderNo);
+        return orders.get(orderDate) == null ? null : orders.get(orderDate).get(orderNo);
     }
 
     @Override
     public List<Order> getOrdersFromDate(LocalDate orderDate) {
         loadFromFile();
-        return orders.get(orderDate) == null ? null : (List<Order>) orders.get(orderDate).values();
+        return orders.get(orderDate) == null ? null :  new ArrayList<>(orders.get(orderDate).values());
     }
 
     @Override

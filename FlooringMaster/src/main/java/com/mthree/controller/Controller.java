@@ -23,6 +23,7 @@ public class Controller {
         this.service = service;
     }
 
+    //Run the project allows the users to choose what function to do
     public void run()
     {
         while(true) {
@@ -47,7 +48,6 @@ public class Controller {
                     break;
                 case 6:
                     exitMessage();
-                    System.exit(0);
                     break;
                 default: //unknown
                     view.displayError("Unknown Option");
@@ -56,11 +56,7 @@ public class Controller {
         }
     }
 
-    public int getMenuSelection()
-    {
-        return view.displayMainMenuAndGetSelection();
-    }
-
+    //Runs the service and view to add an order
     public void addOrder()
     {
         List<Tax> taxes = service.getTaxes();
@@ -68,6 +64,7 @@ public class Controller {
         service.addOrder(view.getAddOrderInput(taxes, products, service.getNextOrderNumber()));
     }
 
+    //Runs the service and view to edit an existing order
     public void editOrder()
     {
         LocalDate orderDate = view.DateInput();
@@ -79,11 +76,18 @@ public class Controller {
         service.addOrder(editedOrder);
     }
 
+    //Runs the service and view to remove an existing order
     public void removeOrder()
     {
         LocalDate orderDate = view.DateInput();
         List<Order> orders = service.getOrdersFromDate(orderDate);
         int orderNo = view.getOrderNumberInput(service.getNextOrderNumber() - 1);
+
+        if (orders == null)
+        {
+            view.removeOrderInputFailure();
+            return;
+        }
 
         Order removedOrder = orders.stream().filter((o) -> o.getOrderNumber() == orderNo).findFirst().orElse(null);
 
@@ -98,9 +102,11 @@ public class Controller {
         }
     }
 
+    //Runs view to display exit message then exit the system
     public void exitMessage()
     {
         view.displayExit();
+        System.exit(0);
     }
 
 }
