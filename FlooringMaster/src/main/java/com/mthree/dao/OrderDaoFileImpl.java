@@ -1,21 +1,21 @@
 package com.mthree.dao;
 
+import com.mthree.exception.NoSuchOrderException;
 import com.mthree.model.Order;
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.PrintWriter;
+import java.io.*;
+import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 @Component
 public class OrderDaoFileImpl implements OrderDao{
 
+    private static final String DELIMITER = ",";
     final String ORDER_FOLDER = "Orders/";
     Map<LocalDate, Map<Integer, Order>> orders;
     int largestOrderNumber = 0;
@@ -25,6 +25,7 @@ public class OrderDaoFileImpl implements OrderDao{
         String fileName = "";
         try{
             PrintWriter writer = new PrintWriter(new FileWriter(ORDER_FOLDER + fileName));
+            
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -32,77 +33,101 @@ public class OrderDaoFileImpl implements OrderDao{
 
     @Override
     public void loadFromFile() {
-        String fileName = "";
+        final String PREFIX = "Orders_";
+        final String SUFFIX = ".txt";
         final int NUMBER_OF_ORDER_VALUES = 12;
+        Path dir = Paths.get(ORDER_FOLDER);
         try
         {
-            Scanner sc = new Scanner(new BufferedReader(new FileReader(ORDER_FOLDER + fileName)));
-            String orderFirstLine = sc.nextLine(); // move past category line
-            String[] categories = orderFirstLine.split(DELIMITER, NUMBER_OF_ORDER_VALUES);
-            while(sc.hasNext())
-            {
-                String orderEntry = sc.nextLine();
-                String[] orderValues = new String[12];
-                orderValues = productEntry.split(DELIMITER, NUMBER_OF_ORDER_VALUES);
+            Files.list(dir).filter(f -> f.toString().endsWith(".txt")).forEach(
+                    orderPath -> {
+                        Scanner sc = null;
+                        try {
+                            sc = new Scanner(new BufferedReader(new FileReader(orderPath.toFile())));
+                            String orderFirstLine = sc.nextLine(); // move past category line
+                            String[] categories = orderFirstLine.split(DELIMITER, NUMBER_OF_ORDER_VALUES);
 
-                int orderNumber;
-                String customerName;
-                String state;
-                BigDecimal taxRate;
-                String productType;
-                BigDecimal area;
-                BigDecimal costPerSquareFoot;
-                BigDecimal laborCostPerSquareFoot;
-                BigDecimal materialCost;
-                BigDecimal laborCost;
-                BigDecimal tax;
-                BigDecimal total;
+                            // Find start and end positions
+                            int start = PREFIX.length(); // right after "Orders_"
+                            int end = orderPath.toString().length() - SUFFIX.length(); // before ".txt"
 
-                switch (orderValues[i])
-                {
-                    case "OrderNumber":
-                        orderNumber = Integer.parseInt(orderValues[i]);
-                        break;
-                    case "CustomerName":
-                        customerName = orderValues[i];
-                        break;
-                    case "State":
-                        state = orderValues[i];
-                        break;
-                    case "TaxRate":
-                        taxRate = new BigDecimal(orderValues[i]);
-                        break;
-                    case "ProductType":
-                        productType = orderValues[i];
-                        break;
-                    case "Area":
-                        area = new BigDecimal(orderValues[i]);
-                        break;
-                    case "CostPerSquareFoot":
-                        costPerSquareFoot = new BigDecimal(orderValues[i]);
-                        break;
-                    case "LaborCostPerSquareFoot":
-                        laborCostPerSquareFoot = new BigDecimal(orderValues[i]);
-                        break;
-                    case "MaterialCost":
-                        materialCost = new BigDecimal(orderValues[i]);
-                        break;
-                    case "laborCost":
-                        laborCost = new BigDecimal(orderValues[i]);
-                        break;
-                    case "Tax":
-                        tax = new BigDecimal(orderValues[i]);
-                        break;
-                    case "Total":
-                        total = new BigDecimal(orderValues[i]);
-                        break;
-                    case default:
-                        break;
-                }
+                            // Extract substring date
+                            String fileDate = orderPath.toString().substring(start, end);
+                            int month = Integer.parseInt(fileDate.substring(0, 2));
+                            int day = Integer.parseInt(fileDate.substring(2, 4));
+                            int year = Integer.parseInt(fileDate.substring(4));
+                            LocalDate orderDate = LocalDate.of(year, month, day);
 
+                            orders.put(orderDate, new HashMap<Integer, Order>());
 
-                //orders.put(new Order(productValues[0], new BigDecimal(productValues[1]), new BigDecimal(productValues[2])));
-            }
+                            while(sc.hasNext()) {
+                                String orderEntry = sc.nextLine();
+                                String[] orderValues = new String[12];
+                                orderValues = orderEntry.split(DELIMITER, NUMBER_OF_ORDER_VALUES);
+
+                                int orderNumber = 0;
+                                String customerName = "";
+                                String state = "";
+                                BigDecimal taxRate = null;
+                                String productType = "";
+                                BigDecimal area = null;
+                                BigDecimal costPerSquareFoot = null;
+                                BigDecimal laborCostPerSquareFoot = null;
+                                BigDecimal materialCost = null;
+                                BigDecimal laborCost = null;
+                                BigDecimal tax = null;
+                                BigDecimal total = null;
+
+                                for (int i = 0; i < NUMBER_OF_ORDER_VALUES; i++) {
+                                    switch (orderValues[i]) {
+                                        case "OrderNumber":
+                                            orderNumber = Integer.parseInt(orderValues[i]);
+                                            break;
+                                        case "CustomerName":
+                                            customerName = orderValues[i];
+                                            break;
+                                        case "State":
+                                            state = orderValues[i];
+                                            break;
+                                        case "TaxRate":
+                                            taxRate = new BigDecimal(orderValues[i]);
+                                            break;
+                                        case "ProductType":
+                                            productType = orderValues[i];
+                                            break;
+                                        case "Area":
+                                            area = new BigDecimal(orderValues[i]);
+                                            break;
+                                        case "CostPerSquareFoot":
+                                            costPerSquareFoot = new BigDecimal(orderValues[i]);
+                                            break;
+                                        case "LaborCostPerSquareFoot":
+                                            laborCostPerSquareFoot = new BigDecimal(orderValues[i]);
+                                            break;
+                                        case "MaterialCost":
+                                            materialCost = new BigDecimal(orderValues[i]);
+                                            break;
+                                        case "laborCost":
+                                            laborCost = new BigDecimal(orderValues[i]);
+                                            break;
+                                        case "Tax":
+                                            tax = new BigDecimal(orderValues[i]);
+                                            break;
+                                        case "Total":
+                                            total = new BigDecimal(orderValues[i]);
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                }
+                                orders.get(orderDate).put(orderNumber, new Order(orderNumber, customerName, state, orderDate, taxRate, productType, area, costPerSquareFoot, laborCostPerSquareFoot));
+                            }
+                        } catch (FileNotFoundException e) {
+                            throw new NoSuchOrderException("Can't find an order");
+                        }
+                    }
+            );
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -144,6 +169,7 @@ public class OrderDaoFileImpl implements OrderDao{
 
     @Override
     public Map<LocalDate, Map<Integer, Order>> getAllOrders() {
+        loadFromFile();
         return orders;
     }
 }
