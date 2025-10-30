@@ -16,7 +16,7 @@ import java.util.*;
 public class OrderDaoFileImpl implements OrderDao{
 
     private static final String DELIMITER = ",";
-    final String ORDER_FOLDER = "Orders/";
+    String ORDER_FOLDER = "Orders/";
     final String PREFIX = "Orders_";
     final String SUFFIX = ".txt";
     Map<LocalDate, Map<Integer, Order>> orders = new HashMap<LocalDate, Map<Integer, Order>>();

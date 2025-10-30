@@ -7,19 +7,30 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTaxDao {
-    TaxDao dao;
+    TaxDaoFileImpl dao;
 
     @BeforeEach
-    void setUp() throws Exception{
-        dao = new TaxDaoFileImpl();
+    void setUp() {
+        dao = new TaxDaoFileImpl(); // uses Data/Taxes.txt
     }
 
     @Test
-    void testGetAllProducts() {
+    void testGetAllTaxes_ReadsFromFile() {
         List<Tax> taxes = dao.getAllTaxes();
-        assertNotEquals(0, taxes.size());
+
+        assertNotNull(taxes, "Tax list should not be null");
+        assertFalse(taxes.isEmpty(), "Tax list should not be empty");
+
+        Tax tx = taxes.stream()
+                .filter(t -> "TX".equalsIgnoreCase(t.getStateAbr()))
+                .findFirst()
+                .orElse(null);
+
+        assertNotNull(tx, "TX tax should exist");
+        assertEquals("Texas", tx.getState());
+        assertEquals("4.45", tx.getTaxRate().toPlainString());
     }
 }

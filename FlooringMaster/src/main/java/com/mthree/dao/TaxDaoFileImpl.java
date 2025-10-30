@@ -31,7 +31,7 @@ public class TaxDaoFileImpl implements TaxDao{
                 String taxEntry = sc.nextLine();
                 String[] taxValues;
                 taxValues = taxEntry.split(DELIMITER, NUMBER_OF_TAX_VALUES);
-                allTaxes.add(new Tax(taxValues[0], taxValues[1], new BigDecimal(taxValues[2])));
+                allTaxes.add(new Tax(taxValues[1], taxValues[0], new BigDecimal(taxValues[2])));
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
