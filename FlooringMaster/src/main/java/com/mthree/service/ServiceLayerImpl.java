@@ -17,9 +17,9 @@ import java.util.List;
 
 @Component
 public class ServiceLayerImpl implements ServiceLayer{
-    private OrderDao orderDao;
-    private ProductDao productDao;
-    private TaxDao taxDao;
+    private final OrderDao orderDao;
+    private final ProductDao productDao;
+    private final TaxDao taxDao;
 
     @Autowired
     public ServiceLayerImpl(OrderDao orderDao, ProductDao productDao, TaxDao taxDao)
@@ -29,31 +29,37 @@ public class ServiceLayerImpl implements ServiceLayer{
         this.taxDao = taxDao;
     }
 
+    //Gets the next order number for the creation of new orders
     @Override
     public int getNextOrderNumber() {
         return orderDao.getNextOrderNumber();
     }
 
+    //Informs the dao to add a new order
     @Override
     public Order addOrder(Order order) {
         return orderDao.addOrder(order);
     }
 
+    //Gets an order based on the day it was created and the order number
     @Override
     public Order getOrder(LocalDate orderDate, int orderNo) {
         return orderDao.getOrder(orderDate, orderNo);
     }
 
+    //Gets the order to be edited based on date and order number
     @Override
     public Order editOrder(LocalDate orderDate, int orderNo) {
         return orderDao.editOrder(orderDate, orderNo);
     }
 
+    //Gets all orders from a specific date
     @Override
     public List<Order> getOrdersFromDate(LocalDate orderDate) {
         return orderDao.getOrdersFromDate(orderDate);
     }
 
+    //Gets all orders and returns it as a list
     @Override
     public List<Order> getAllOrders() {
         List<Order> orders = new ArrayList<>();
@@ -61,16 +67,19 @@ public class ServiceLayerImpl implements ServiceLayer{
         return orders;
     }
 
+    //Calls the dao to remove an order based on date and order number
     @Override
     public Order removeOrder(LocalDate orderDate, int orderNo) {
         return orderDao.removeOrder(orderDate, orderNo);
     }
 
+    //Gets all the taxes from the dao
     @Override
     public List<Tax> getTaxes() {
         return taxDao.getAllTaxes();
     }
 
+    //Gets all the product from the dao
     @Override
     public List<Product> getProducts() {
         return productDao.getAllProducts();

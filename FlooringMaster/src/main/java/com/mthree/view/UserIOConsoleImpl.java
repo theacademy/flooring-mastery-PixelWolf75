@@ -8,17 +8,20 @@ public class UserIOConsoleImpl implements UserIO{
 
     Scanner scan = new Scanner(System.in);
 
+    //Output a message
     @Override
     public void display(String message) {
         System.out.println(message);
     }
 
+    //Get a string input from user
     @Override
     public String readString(String prompt) {
         this.display(prompt);
         return scan.nextLine();
     }
 
+    //Get an integer input asks for re-entry if no an integer
     @Override
     public int readInt(String prompt) {
         while(true) {
@@ -33,6 +36,7 @@ public class UserIOConsoleImpl implements UserIO{
         }
     }
 
+    //Gets an integer input above a minimum inclusive
     @Override
     public int readInt(String prompt, int min) {
         while(true) {
@@ -48,6 +52,7 @@ public class UserIOConsoleImpl implements UserIO{
         }
     }
 
+    //Gets an integer input within a range
     @Override
     public int readInt(String prompt, int min, int max) {
         while (true)

@@ -68,7 +68,7 @@ public class Controller {
     public void editOrder()
     {
         LocalDate orderDate = view.DateInput();
-        int orderNo = view.getOrderNumberInput(service.getNextOrderNumber());
+        int orderNo = view.getOrderNumberInput();
         List<Tax> taxes = service.getTaxes();
         List<Product> products = service.getProducts();
         Order orderToEdit = service.editOrder(orderDate, orderNo);
@@ -87,7 +87,7 @@ public class Controller {
     {
         LocalDate orderDate = view.DateInput();
         List<Order> orders = service.getOrdersFromDate(orderDate);
-        int orderNo = view.getOrderNumberInput(service.getNextOrderNumber());
+        int orderNo = view.getOrderNumberInput();
 
         if (orders == null)
         {

@@ -17,6 +17,7 @@ public class ProductDaoFileImpl implements ProductDao{
     final String DELIMITER = ",";
     List<Product> allProducts = new ArrayList<>();
 
+    //Loads all products from the product file
     @Override
     public void loadFile() {
         try
@@ -36,6 +37,7 @@ public class ProductDaoFileImpl implements ProductDao{
         }
     }
 
+    //Gets all products after loading the file
     @Override
     public List<Product> getAllProducts() {
         loadFile();

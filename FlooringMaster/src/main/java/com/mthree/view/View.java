@@ -23,6 +23,7 @@ public class View {
         io.display("This a test message which would work if spring is properly setup");
     }
 
+    //Displays the options and asks for user input between the option range
     public int displayMainMenuAndGetSelection() {
         io.display("");
         io.display("Main Menu");
@@ -36,16 +37,19 @@ public class View {
         return io.readInt("Please select an option:", 1, 6);
     }
 
+    //Allows an error message to be displayed
     public void displayError(String error) {
         io.display("ERROR: " + error);
     }
 
+    //Displays all orders in detail
     public void displayAllOrders(List<Order> orders) {
         io.display("");
         io.display("All Orders");
         orders.forEach(this::displayOrderDetails);
     }
 
+    //Displays the details of an order
     private void displayOrderDetails(Order order) {
         io.display("");
         io.display("OrderNo: " + order.getOrderNumber());
@@ -53,12 +57,21 @@ public class View {
         io.display("State: " + order.getState());
         io.display("OrderDate: " + order.getOrderDate());
         io.display("ProductType: " + order.getProductType());
+        io.display("LaborCostPerSquareFoot: " + order.getLaborCostPerSquareFoot());
+        io.display("CostPerSquareFoot: " + order.getCostPerSquareFoot());
+        io.display("Area: " + order.getArea());
+        io.display("TaxRate: " + order.getTaxRate());
+        io.display("LaborCost: " + order.getLaborCost());
+        io.display("Tax: " + order.getTax());
+        io.display("Total: " + order.getTotal());
     }
 
-    public int getOrderNumberInput(int orderNo) {
-        return io.readInt("Enter an order number between 0 and " + (orderNo - 1) + ":", 0, orderNo - 1);
+    //Get the order number input
+    public int getOrderNumberInput() {
+        return io.readInt("Enter an order number:");
     }
 
+    //Prompts the user to enter in a date that is in the future from the time of entering for creating a new order
     private LocalDate DateCreationInput() {
         LocalDate present = LocalDate.now();
         int year;
@@ -81,20 +94,21 @@ public class View {
         return orderDate;
     }
 
+    //Gets a date for the sake of comparing it to other order dates
     public LocalDate DateInput() {
         int year;
         int month;
         int day;
         LocalDate orderDate;
         year = io.readInt("Enter the year of the order, has to be an existing year that an order was made", 0);
-        month = io.readInt("Enter the month as a number it has to be in the future", 1, 12);
-        day = io.readInt("Enter the day as a number it has to be in the future", 1, month % 2 == 0 ? 30 : 31);
+        month = io.readInt("Enter the month as a number it has to be an order date", 1, 12);
+        day = io.readInt("Enter the day as a number it has to be an order date", 1, month % 2 == 0 ? 30 : 31);
         orderDate = LocalDate.of(year, month, day);
 
         return orderDate;
     }
 
-
+    //Gets all the user data to create a new order, displaying the products and taxes to choose from
     public Order getAddOrderInput(List<Tax> taxes, List<Product> products, int orderNo) {
         io.display("--Enter Order Details--");
         String customerName = io.readString("Enter the customer name:");
@@ -142,6 +156,7 @@ public class View {
         return new Order(orderNo, customerName, tax.getStateAbr(), orderDate, tax.getTaxRate(), product.getProductType(), area, product.getCostPerSquareFoot(), product.getLaborCostPerSquareFoot());
     }
 
+    //Similar to the creation of an order it allows an order's details to be edited, if a field wants to be unchanged you press enter on an empty line unless stated otherwise
     public Order getOrderEditInput(Order order, List<Tax> taxes, List<Product> products)
     {
         io.display("--Enter New Order Details--");

@@ -18,6 +18,7 @@ public class TaxDaoFileImpl implements TaxDao{
     final String DELIMITER = ",";
     List<Tax> allTaxes = new ArrayList<>();
 
+    //Loads all tax information from the tax file
     @Override
     public void loadFile() {
         try
@@ -37,6 +38,7 @@ public class TaxDaoFileImpl implements TaxDao{
         }
     }
 
+    //Get all taxes by loading the file
     @Override
     public List<Tax> getAllTaxes() {
         loadFile();

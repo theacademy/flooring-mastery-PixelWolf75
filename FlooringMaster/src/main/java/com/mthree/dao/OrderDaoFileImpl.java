@@ -50,6 +50,7 @@ public class OrderDaoFileImpl implements OrderDao{
         }
     }
 
+    //Loads all files from the order directory and deserialises the information to fit into the orders
     @Override
     public void loadFromFile() {
 
@@ -57,6 +58,7 @@ public class OrderDaoFileImpl implements OrderDao{
         Path dir = Paths.get(ORDER_FOLDER);
         try
         {
+            //For each file in the orders folder
             Files.list(dir).filter(f -> f.toString().endsWith(".txt")).forEach(
                     orderPath -> {
                         Scanner sc = null;
@@ -65,19 +67,11 @@ public class OrderDaoFileImpl implements OrderDao{
                             String orderFirstLine = sc.nextLine(); // move past category line
                             String[] categories = orderFirstLine.split(DELIMITER, NUMBER_OF_ORDER_VALUES);
 
-                            // Find start and end positions
-                            int start = ORDER_FOLDER.length() + PREFIX.length(); // right after "Orders_"
-                            int end = orderPath.toString().length() - SUFFIX.length(); // before ".txt"
-
-                            // Extract substring date
-                            String fileDate = orderPath.toString().substring(start, end);
-                            int month = Integer.parseInt(fileDate.substring(0, 2));
-                            int day = Integer.parseInt(fileDate.substring(2, 4));
-                            int year = Integer.parseInt(fileDate.substring(4));
-                            LocalDate orderDate = LocalDate.of(year, month, day);
+                            LocalDate orderDate = getLocalDate(orderPath);
 
                             orders.put(orderDate, new HashMap<Integer, Order>());
 
+                            //Scan each order line and deserialises it into new orders
                             while(sc.hasNext()) {
                                 String orderEntry = sc.nextLine();
                                 String[] orderValues = new String[12];
@@ -100,7 +94,7 @@ public class OrderDaoFileImpl implements OrderDao{
                                     switch (categories[i]) {
                                         case "OrderNumber":
                                             orderNumber = Integer.parseInt(orderValues[i]);
-                                            if (orderNumber > largestOrderNumber) largestOrderNumber = orderNumber;
+                                            if (orderNumber > largestOrderNumber) largestOrderNumber = orderNumber; //Updates the largest order number
                                             break;
                                         case "CustomerName":
                                             customerName = orderValues[i];
@@ -153,11 +147,26 @@ public class OrderDaoFileImpl implements OrderDao{
 
     }
 
+    //Gets the local date from the file path
+    private LocalDate getLocalDate(Path orderPath) {
+        int start = ORDER_FOLDER.length() + PREFIX.length(); // right after "Orders_"
+        int end = orderPath.toString().length() - SUFFIX.length(); // before ".txt"
+
+        // Extract substring date
+        String fileDate = orderPath.toString().substring(start, end);
+        int month = Integer.parseInt(fileDate.substring(0, 2));
+        int day = Integer.parseInt(fileDate.substring(2, 4));
+        int year = Integer.parseInt(fileDate.substring(4));
+        return LocalDate.of(year, month, day);
+    }
+
+    //Returns largest order number to be used for order creation
     @Override
     public int getNextOrderNumber() {
         return this.largestOrderNumber;
     }
 
+    //Adds a new order to the dao, increments the order number and writes it to the file
     @Override
     public Order addOrder(Order order) {
         orders.computeIfAbsent(order.getOrderDate(), k -> new HashMap<>());
@@ -167,24 +176,28 @@ public class OrderDaoFileImpl implements OrderDao{
         return order;
     }
 
+    //Gets the order based on the date by loading the order folder if no orders exist then it returns a null
     @Override
     public Order getOrder(LocalDate orderDate, int orderNo) {
         loadFromFile();
-        return orders.get(orderDate).get(orderNo);
+        return orders.get(orderDate) == null ? null : orders.get(orderDate).get(orderNo);
     }
 
+    //Gets the order based on the date by loading the order folder if no orders exist it returns a null
     @Override
     public Order editOrder(LocalDate orderDate, int orderNo) {
         loadFromFile();
         return orders.get(orderDate) == null ? null : orders.get(orderDate).get(orderNo);
     }
 
+    //Gets all orders from a date
     @Override
     public List<Order> getOrdersFromDate(LocalDate orderDate) {
         loadFromFile();
         return orders.get(orderDate) == null ? null :  new ArrayList<>(orders.get(orderDate).values());
     }
 
+    //Removes an order based on a date and order number
     @Override
     public Order removeOrder(LocalDate orderDate, int orderNo) {
         orders.get(orderDate).remove(orderNo);
@@ -193,6 +206,7 @@ public class OrderDaoFileImpl implements OrderDao{
         return null;
     }
 
+    //Gets all orders mapped from date to the orders
     @Override
     public Map<LocalDate, Map<Integer, Order>> getAllOrders() {
         loadFromFile();
