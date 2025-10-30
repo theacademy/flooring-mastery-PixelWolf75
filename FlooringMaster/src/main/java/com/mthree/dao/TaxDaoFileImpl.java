@@ -39,6 +39,7 @@ public class TaxDaoFileImpl implements TaxDao{
 
     @Override
     public List<Tax> getAllTaxes() {
+        loadFile();
         return allTaxes;
     }
 }

@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Component
@@ -17,8 +18,6 @@ public class View {
 
     @Autowired
     private UserIO io;
-
-    private int orderNo = 0;
 
     public void testRun() {
         io.display("This a test message which would work if spring is properly setup");
@@ -56,7 +55,7 @@ public class View {
         io.display("ProductType: " + order.getProductType());
     }
 
-    public int getOrderNumberInput() {
+    public int getOrderNumberInput(int orderNo) {
         return io.readInt("Enter an order number between 0 and " + (orderNo - 1) + ":", 0, orderNo - 1);
     }
 
@@ -96,7 +95,7 @@ public class View {
     }
 
 
-    public Order getAddOrderInput(List<Tax> taxes, List<Product> products) {
+    public Order getAddOrderInput(List<Tax> taxes, List<Product> products, int orderNo) {
         io.display("--Enter Order Details--");
         String customerName = io.readString("Enter the customer name:");
 
@@ -140,7 +139,7 @@ public class View {
         }
         BigDecimal area = new BigDecimal(io.readInt("What's the area in sqft (minimum of 100sqft)", 100));
 
-        return new Order(orderNo++, customerName, tax.getStateAbr(), orderDate, tax.getTaxRate(), product.getProductType(), area, product.getCostPerSquareFoot(), product.getLaborCostPerSquareFoot());
+        return new Order(orderNo, customerName, tax.getStateAbr(), orderDate, tax.getTaxRate(), product.getProductType(), area, product.getCostPerSquareFoot(), product.getLaborCostPerSquareFoot());
     }
 
     public Order getOrderEditInput(Order order, List<Tax> taxes, List<Product> products)
@@ -222,7 +221,6 @@ public class View {
 
     public void removeOrderInputSuccess() {
         io.display("Removed an Order");
-        orderNo--;
     }
 
     public void removeOrderInputFailure() {

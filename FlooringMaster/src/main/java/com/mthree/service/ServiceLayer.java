@@ -13,6 +13,7 @@ public interface ServiceLayer {
     Order getOrder(LocalDate orderDate, int orderNo);
     Order editOrder(LocalDate orderDate, int orderNo);
     List<Order> getOrdersFromDate(LocalDate orderDate);
+    List<Order> getAllOrders();
     Order removeOrder(LocalDate orderDate, int orderNo);
     List<Tax> getTaxes();
     List<Product> getProducts();

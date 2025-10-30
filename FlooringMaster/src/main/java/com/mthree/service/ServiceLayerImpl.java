@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -40,14 +41,12 @@ public class ServiceLayerImpl implements ServiceLayer{
 
     @Override
     public Order getOrder(LocalDate orderDate, int orderNo) {
-        Date date = Date.from(orderDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        return orderDao.getOrder(date, orderNo);
+        return orderDao.getOrder(orderDate, orderNo);
     }
 
     @Override
     public Order editOrder(LocalDate orderDate, int orderNo) {
-        Date date = Date.from(orderDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        return orderDao.editOrder(date, orderNo);
+        return orderDao.editOrder(orderDate, orderNo);
     }
 
     @Override
@@ -56,9 +55,15 @@ public class ServiceLayerImpl implements ServiceLayer{
     }
 
     @Override
+    public List<Order> getAllOrders() {
+        List<Order> orders = new ArrayList<>();
+        orderDao.getAllOrders().values().forEach((m) -> orders.addAll(m.values()));
+        return orders;
+    }
+
+    @Override
     public Order removeOrder(LocalDate orderDate, int orderNo) {
-        Date date = Date.from(orderDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        return orderDao.removeOrder(date, orderNo);
+        return orderDao.removeOrder(orderDate, orderNo);
     }
 
     @Override

@@ -19,7 +19,7 @@ public class OrderDaoFileImpl implements OrderDao{
     final String ORDER_FOLDER = "Orders/";
     final String PREFIX = "Orders_";
     final String SUFFIX = ".txt";
-    Map<LocalDate, Map<Integer, Order>> orders;
+    Map<LocalDate, Map<Integer, Order>> orders = new HashMap<LocalDate, Map<Integer, Order>>();
     int largestOrderNumber = 0;
 
     @Override
@@ -58,7 +58,7 @@ public class OrderDaoFileImpl implements OrderDao{
                             String[] categories = orderFirstLine.split(DELIMITER, NUMBER_OF_ORDER_VALUES);
 
                             // Find start and end positions
-                            int start = PREFIX.length(); // right after "Orders_"
+                            int start = ORDER_FOLDER.length() + PREFIX.length(); // right after "Orders_"
                             int end = orderPath.toString().length() - SUFFIX.length(); // before ".txt"
 
                             // Extract substring date
@@ -89,7 +89,7 @@ public class OrderDaoFileImpl implements OrderDao{
                                 BigDecimal total = null;
 
                                 for (int i = 0; i < NUMBER_OF_ORDER_VALUES; i++) {
-                                    switch (orderValues[i]) {
+                                    switch (categories[i]) {
                                         case "OrderNumber":
                                             orderNumber = Integer.parseInt(orderValues[i]);
                                             break;
@@ -151,29 +151,36 @@ public class OrderDaoFileImpl implements OrderDao{
 
     @Override
     public Order addOrder(Order order) {
-
+        orders.computeIfAbsent(order.getOrderDate(), k -> new HashMap<>());
+        orders.get(order.getOrderDate()).put(order.getOrderNumber(), order);
         largestOrderNumber++;
-        return null;
+        writeToFile();
+        return order;
     }
 
     @Override
-    public Order getOrder(Date orderDate, int orderNo) {
+    public Order getOrder(LocalDate orderDate, int orderNo) {
+        loadFromFile();
         return orders.get(orderDate).get(orderNo);
     }
 
     @Override
-    public Order editOrder(Date orderDate, int orderNo) {
+    public Order editOrder(LocalDate orderDate, int orderNo) {
+        loadFromFile();
         return orders.get(orderDate).get(orderNo);
     }
 
     @Override
     public List<Order> getOrdersFromDate(LocalDate orderDate) {
-        return (List<Order>) orders.get(orderDate).values();
+        loadFromFile();
+        return orders.get(orderDate) == null ? null : (List<Order>) orders.get(orderDate).values();
     }
 
     @Override
-    public Order removeOrder(Date orderDate, int orderNo) {
+    public Order removeOrder(LocalDate orderDate, int orderNo) {
+        orders.get(orderDate).remove(orderNo);
         largestOrderNumber--;
+        writeToFile();
         return null;
     }
 

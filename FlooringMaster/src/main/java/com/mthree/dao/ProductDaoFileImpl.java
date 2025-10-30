@@ -38,6 +38,7 @@ public class ProductDaoFileImpl implements ProductDao{
 
     @Override
     public List<Product> getAllProducts() {
+        loadFile();
         return allProducts;
     }
 }

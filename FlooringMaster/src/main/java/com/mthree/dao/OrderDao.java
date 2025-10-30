@@ -12,9 +12,9 @@ public interface OrderDao {
     void loadFromFile();
     int getNextOrderNumber();
     Order addOrder(Order order);
-    Order getOrder(Date orderDate, int orderNo);
-    Order editOrder(Date orderDate, int orderNo);
+    Order getOrder(LocalDate orderDate, int orderNo);
+    Order editOrder(LocalDate orderDate, int orderNo);
     List<Order> getOrdersFromDate(LocalDate orderDate);
-    Order removeOrder(Date orderDate, int orderNo);
+    Order removeOrder(LocalDate orderDate, int orderNo);
     Map<LocalDate, Map<Integer, Order>> getAllOrders();
 }

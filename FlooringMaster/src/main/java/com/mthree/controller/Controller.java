@@ -30,7 +30,7 @@ public class Controller {
 
             switch(choice) {
                 case 1: //view all
-                    List<Order> orders = service.getOrdersFromDate(LocalDate.now());
+                    List<Order> orders = service.getAllOrders();
                     view.displayAllOrders(orders);
                     break;
                 case 2:
@@ -65,13 +65,13 @@ public class Controller {
     {
         List<Tax> taxes = service.getTaxes();
         List<Product> products = service.getProducts();
-        service.addOrder(view.getAddOrderInput(taxes, products));
+        service.addOrder(view.getAddOrderInput(taxes, products, service.getNextOrderNumber()));
     }
 
     public void editOrder()
     {
         LocalDate orderDate = view.DateInput();
-        int orderNo = view.getOrderNumberInput();
+        int orderNo = view.getOrderNumberInput(service.getNextOrderNumber() - 1);
         List<Tax> taxes = service.getTaxes();
         List<Product> products = service.getProducts();
         Order editedOrder = view.getOrderEditInput(service.editOrder(orderDate, orderNo), taxes, products);
@@ -83,7 +83,7 @@ public class Controller {
     {
         LocalDate orderDate = view.DateInput();
         List<Order> orders = service.getOrdersFromDate(orderDate);
-        int orderNo = view.getOrderNumberInput();
+        int orderNo = view.getOrderNumberInput(service.getNextOrderNumber() - 1);
 
         Order removedOrder = orders.stream().filter((o) -> o.getOrderNumber() == orderNo).findFirst().orElse(null);
 
