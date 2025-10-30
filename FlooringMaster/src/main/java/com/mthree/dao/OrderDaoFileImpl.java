@@ -33,7 +33,7 @@ public class OrderDaoFileImpl implements OrderDao{
                 day = day.length() != 2 ? "0" + day : day;
                 String year = String.valueOf(orderDate.getYear());
 
-                String fileName = ORDER_FOLDER + PREFIX + orderDate.getMonthValue() + orderDate.getDayOfMonth() + orderDate.getDayOfYear() + SUFFIX;
+                String fileName = ORDER_FOLDER + PREFIX + month + day + year + SUFFIX;
                 PrintWriter writer = new PrintWriter(new FileWriter(fileName));
 
                 writer.println("OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
@@ -100,6 +100,7 @@ public class OrderDaoFileImpl implements OrderDao{
                                     switch (categories[i]) {
                                         case "OrderNumber":
                                             orderNumber = Integer.parseInt(orderValues[i]);
+                                            if (orderNumber > largestOrderNumber) largestOrderNumber = orderNumber;
                                             break;
                                         case "CustomerName":
                                             customerName = orderValues[i];
