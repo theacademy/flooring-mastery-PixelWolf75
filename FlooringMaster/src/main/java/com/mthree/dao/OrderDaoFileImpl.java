@@ -17,15 +17,26 @@ public class OrderDaoFileImpl implements OrderDao{
 
     private static final String DELIMITER = ",";
     final String ORDER_FOLDER = "Orders/";
+    final String PREFIX = "Orders_";
+    final String SUFFIX = ".txt";
     Map<LocalDate, Map<Integer, Order>> orders;
     int largestOrderNumber = 0;
 
     @Override
     public void writeToFile() {
-        String fileName = "";
         try{
-            PrintWriter writer = new PrintWriter(new FileWriter(ORDER_FOLDER + fileName));
-            
+            for(LocalDate orderDate : orders.keySet())
+            {
+                String fileName = ORDER_FOLDER + PREFIX + orderDate.getMonthValue() + orderDate.getDayOfMonth() + orderDate.getDayOfYear() + SUFFIX;
+                PrintWriter writer = new PrintWriter(new FileWriter(fileName));
+
+                writer.println("OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
+
+                for (Order order : orders.get(orderDate).values())
+                {
+                    writer.println(order.toString());
+                }
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -33,8 +44,7 @@ public class OrderDaoFileImpl implements OrderDao{
 
     @Override
     public void loadFromFile() {
-        final String PREFIX = "Orders_";
-        final String SUFFIX = ".txt";
+
         final int NUMBER_OF_ORDER_VALUES = 12;
         Path dir = Paths.get(ORDER_FOLDER);
         try
