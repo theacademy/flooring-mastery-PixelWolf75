@@ -33,9 +33,51 @@ public class OrderDaoFileImpl implements OrderDao{
     @Override
     public void loadFromFile() {
         String fileName = "";
+        final int NUMBER_OF_ORDER_VALUES = 12;
         try
         {
             Scanner sc = new Scanner(new BufferedReader(new FileReader(ORDER_FOLDER + fileName)));
+            String orderFirstLine = sc.nextLine(); // move past category line
+            String[] categories = orderFirstLine.split(DELIMITER, NUMBER_OF_ORDER_VALUES);
+            while(sc.hasNext())
+            {
+                String orderEntry = sc.nextLine();
+                String[] orderValues = new String[12];
+                orderValues = productEntry.split(DELIMITER, NUMBER_OF_ORDER_VALUES);
+
+                switch (orderValues[i])
+                {
+                    case "OrderNumber":
+                        break;
+                    case "CustomerName":
+                        break;
+                    case "State":
+                        break;
+                    case "TaxRate":
+                        break;
+                    case "ProductType":
+                        break;
+                    case "Area":
+                        break;
+                    case "CostPerSquareFoot":
+                        break;
+                    case "LaborCostPerSquareFoot":
+                        break;
+                    case "MaterialCost":
+                        break;
+                    case "laborCost":
+                        break;
+                    case "Tax":
+                        break;
+                    case "Total":
+                        break;
+                    case default:
+                        break;
+                }
+
+
+                allProducts.add(new Product(productValues[0], new BigDecimal(productValues[1]), new BigDecimal(productValues[2])));
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
