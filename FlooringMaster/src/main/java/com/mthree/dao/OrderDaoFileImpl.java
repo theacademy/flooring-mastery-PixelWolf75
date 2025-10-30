@@ -45,38 +45,63 @@ public class OrderDaoFileImpl implements OrderDao{
                 String[] orderValues = new String[12];
                 orderValues = productEntry.split(DELIMITER, NUMBER_OF_ORDER_VALUES);
 
+                int orderNumber;
+                String customerName;
+                String state;
+                BigDecimal taxRate;
+                String productType;
+                BigDecimal area;
+                BigDecimal costPerSquareFoot;
+                BigDecimal laborCostPerSquareFoot;
+                BigDecimal materialCost;
+                BigDecimal laborCost;
+                BigDecimal tax;
+                BigDecimal total;
+
                 switch (orderValues[i])
                 {
                     case "OrderNumber":
+                        orderNumber = Integer.parseInt(orderValues[i]);
                         break;
                     case "CustomerName":
+                        customerName = orderValues[i];
                         break;
                     case "State":
+                        state = orderValues[i];
                         break;
                     case "TaxRate":
+                        taxRate = new BigDecimal(orderValues[i]);
                         break;
                     case "ProductType":
+                        productType = orderValues[i];
                         break;
                     case "Area":
+                        area = new BigDecimal(orderValues[i]);
                         break;
                     case "CostPerSquareFoot":
+                        costPerSquareFoot = new BigDecimal(orderValues[i]);
                         break;
                     case "LaborCostPerSquareFoot":
+                        laborCostPerSquareFoot = new BigDecimal(orderValues[i]);
                         break;
                     case "MaterialCost":
+                        materialCost = new BigDecimal(orderValues[i]);
                         break;
                     case "laborCost":
+                        laborCost = new BigDecimal(orderValues[i]);
                         break;
                     case "Tax":
+                        tax = new BigDecimal(orderValues[i]);
                         break;
                     case "Total":
+                        total = new BigDecimal(orderValues[i]);
                         break;
                     case default:
                         break;
                 }
 
 
-                allProducts.add(new Product(productValues[0], new BigDecimal(productValues[1]), new BigDecimal(productValues[2])));
+                //orders.put(new Order(productValues[0], new BigDecimal(productValues[1]), new BigDecimal(productValues[2])));
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
