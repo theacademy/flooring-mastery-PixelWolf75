@@ -61,7 +61,7 @@ public class OrderDaoFileImpl implements OrderDao{
             //For each file in the orders folder
             Files.list(dir).filter(f -> f.toString().endsWith(".txt")).forEach(
                     orderPath -> {
-                        Scanner sc = null;
+                        Scanner sc;
                         try {
                             sc = new Scanner(new BufferedReader(new FileReader(orderPath.toFile())));
                             String orderFirstLine = sc.nextLine(); // move past category line
@@ -69,12 +69,12 @@ public class OrderDaoFileImpl implements OrderDao{
 
                             LocalDate orderDate = getLocalDate(orderPath);
 
-                            orders.put(orderDate, new HashMap<Integer, Order>());
+                            orders.put(orderDate, new HashMap<>());
 
                             //Scan each order line and deserialises it into new orders
                             while(sc.hasNext()) {
                                 String orderEntry = sc.nextLine();
-                                String[] orderValues = new String[12];
+                                String[] orderValues;
                                 orderValues = orderEntry.split(DELIMITER, NUMBER_OF_ORDER_VALUES);
 
                                 int orderNumber = 0;

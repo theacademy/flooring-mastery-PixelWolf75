@@ -28,7 +28,7 @@ public class ProductDaoFileImpl implements ProductDao{
             while(sc.hasNext())
             {
                 String productEntry = sc.nextLine();
-                String[] productValues = new String[3];
+                String[] productValues;
                 productValues = productEntry.split(DELIMITER, NUMBER_OF_PRODUCT_VALUES);
                 allProducts.add(new Product(productValues[0], new BigDecimal(productValues[1]), new BigDecimal(productValues[2])));
             }

@@ -29,7 +29,7 @@ public class TaxDaoFileImpl implements TaxDao{
             while(sc.hasNext())
             {
                 String taxEntry = sc.nextLine();
-                String[] taxValues = new String[3];
+                String[] taxValues;
                 taxValues = taxEntry.split(DELIMITER, NUMBER_OF_TAX_VALUES);
                 allTaxes.add(new Tax(taxValues[0], taxValues[1], new BigDecimal(taxValues[2])));
             }
