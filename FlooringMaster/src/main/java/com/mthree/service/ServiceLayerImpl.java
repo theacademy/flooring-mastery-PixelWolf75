@@ -10,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Component
@@ -37,8 +35,8 @@ public class ServiceLayerImpl implements ServiceLayer{
 
     //Informs the dao to add a new order
     @Override
-    public Order addOrder(Order order) {
-        return orderDao.addOrder(order);
+    public void addOrder(Order order) {
+        orderDao.addOrder(order);
     }
 
     //Gets an order based on the day it was created and the order number
@@ -69,8 +67,8 @@ public class ServiceLayerImpl implements ServiceLayer{
 
     //Calls the dao to remove an order based on date and order number
     @Override
-    public Order removeOrder(LocalDate orderDate, int orderNo) {
-        return orderDao.removeOrder(orderDate, orderNo);
+    public void removeOrder(LocalDate orderDate, int orderNo) {
+        orderDao.removeOrder(orderDate, orderNo);
     }
 
     //Gets all the taxes from the dao

@@ -168,12 +168,11 @@ public class OrderDaoFileImpl implements OrderDao{
 
     //Adds a new order to the dao, increments the order number and writes it to the file
     @Override
-    public Order addOrder(Order order) {
+    public void addOrder(Order order) {
         orders.computeIfAbsent(order.getOrderDate(), k -> new HashMap<>());
         orders.get(order.getOrderDate()).put(order.getOrderNumber(), order);
         largestOrderNumber++;
         writeToFile();
-        return order;
     }
 
     //Gets the order based on the date by loading the order folder if no orders exist then it returns a null
@@ -199,11 +198,10 @@ public class OrderDaoFileImpl implements OrderDao{
 
     //Removes an order based on a date and order number
     @Override
-    public Order removeOrder(LocalDate orderDate, int orderNo) {
+    public void removeOrder(LocalDate orderDate, int orderNo) {
         orders.get(orderDate).remove(orderNo);
         largestOrderNumber--;
         writeToFile();
-        return null;
     }
 
     //Gets all orders mapped from date to the orders
