@@ -28,9 +28,9 @@ public class View {
         io.display("");
         io.display("Main Menu");
         io.display("1. View Orders");
-        io.display("2. Add Book");
-        io.display("3. Update Book");
-        io.display("4. Delete Book");
+        io.display("2. Add Order");
+        io.display("3. Update Order");
+        io.display("4. Delete Order");
         io.display("5. Export data");
         io.display("6. Exit");
 
