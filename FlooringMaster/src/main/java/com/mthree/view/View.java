@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -28,11 +29,12 @@ public class View {
         io.display("");
         io.display("Main Menu");
         io.display("1. View Orders");
-        io.display("2. Add Order");
-        io.display("3. Update Order");
-        io.display("4. Delete Order");
-        io.display("5. Export data");
-        io.display("6. Exit");
+        io.display("2. View All Orders");
+        io.display("3. Add Order");
+        io.display("4. Update Order");
+        io.display("5. Delete Order");
+        io.display("6. Export data");
+        io.display("7. Exit");
 
         return io.readInt("Please select an option:", 1, 6);
     }
@@ -49,13 +51,22 @@ public class View {
         orders.forEach(this::displayOrderDetails);
     }
 
+    //Displays all orders from a date in detail
+    public void displayAllOrdersFromDate(List<Order> orders, LocalDate orderDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+        io.display("");
+        io.display("All Orders from " + orderDate.format(formatter));
+        orders.forEach(this::displayOrderDetails);
+    }
+
     //Displays the details of an order
     private void displayOrderDetails(Order order) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
         io.display("");
         io.display("OrderNo: " + order.getOrderNumber());
         io.display("CustomerName: " + order.getCustomerName());
         io.display("State: " + order.getState());
-        io.display("OrderDate: " + order.getOrderDate());
+        io.display("OrderDate: " + order.getOrderDate().format(formatter));
         io.display("ProductType: " + order.getProductType());
         io.display("LaborCostPerSquareFoot: " + order.getLaborCostPerSquareFoot());
         io.display("CostPerSquareFoot: " + order.getCostPerSquareFoot());

@@ -30,23 +30,25 @@ public class Controller {
             int choice = view.displayMainMenuAndGetSelection();
 
             switch(choice) {
-                case 1: //view all
-                    List<Order> orders = service.getAllOrders();
-                    view.displayAllOrders(orders);
+                case 1: //view orders from a date
+                    displayOrders();
                     break;
                 case 2:
-                    addOrder();
+                    displayAllOrders();
                     break;
                 case 3:
-                    editOrder();
+                    addOrder();
                     break;
                 case 4:
-                    removeOrder();
+                    editOrder();
                     break;
                 case 5:
-                    view.displayError("Export hasn't been implemented");
+                    removeOrder();
                     break;
                 case 6:
+                    view.displayError("Export hasn't been implemented");
+                    break;
+                case 7:
                     exitMessage();
                     break;
                 default: //unknown
@@ -54,6 +56,20 @@ public class Controller {
                     break;
             }
         }
+    }
+
+    //Call the display orders view by getting a date
+    public void displayOrders()
+    {
+        LocalDate date = view.DateInput();
+        List<Order> ordersFromDate = service.getOrdersFromDate(date);
+        view.displayAllOrdersFromDate(ordersFromDate, date);
+    }
+
+    public void displayAllOrders()
+    {
+        List<Order> orders = service.getAllOrders();
+        view.displayAllOrders(orders);
     }
 
     //Runs the service and view to add an order
